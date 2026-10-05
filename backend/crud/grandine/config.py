@@ -1,0 +1,36 @@
+headers_preventivo_grandine_csv = [
+    "Condifesa",
+        "Comune",
+        "Prodotto nome",
+        "Prodotto dettaglio",
+        "Codice Prodotto Ministeriale",
+        "Codice Dettaglio Condifesa",
+        "Serra",
+        "Bio",
+        "Superficie (mq)",
+        "Prezzo",
+        "Resa",
+        "Valore Assicurato",
+        "Tabella di Conversione",
+        "Garanzie e Franchigie",
+        "Tasso Agevolato",
+        "Tasso Non Agevolato",
+        "Tasso Lordo",
+        "Premio Lordo",
+        "Premio Netto"
+]
+
+coverage_fields = [
+    'GR_AG_id',
+    'VF_AG_id',
+    'EP_AG_id',
+    'EP_CAT_AG_id',
+    'neve_AG_id',
+    'alluvione_AG_id',
+    'gelo_brina_AG_id',
+    'siccita_AG_id',
+    'colpo_sole_vento_caldo_AG_id', 
+    'colpo_sole_vento_caldo_CAT_AG_id', 
+    'sbalzo_termico_onda_calore_AG_id', 
+    'sbalzo_termico_onda_calore_CAT_AG_id',
+]

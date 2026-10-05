@@ -1,0 +1,499 @@
+Table "core"."comune" {
+  "codice_regione" int(10)
+  "codice_unita" int(10)
+  "codice_provincia" int(10)
+  "progressivo_comune" int(10)
+  "codice_comune" int(10) [pk, not null]
+  "nome" nvarchar(255)
+  "codice_ripartizione_geografica" int(10)
+  "ripartizione_geografica" nvarchar(50)
+  "denominazione_regione" nvarchar(50)
+  "denominazione_unita" nvarchar(50)
+  "tipologia_unita" int(10)
+  "provincia_short" nvarchar(2)
+  "codice_catastale" nvarchar(8)
+  "codice_nuts3" nvarchar(10)
+  "cap" nvarchar(5)
+}
+
+Table "core"."persona_fisica" {
+  "nome" nvarchar(255)
+  "cf" nvarchar(16) [pk, not null]
+  "codice_comune" int(10)
+  "indirizzo" nvarchar(255)
+  "sesso" nvarchar(1)
+  "cell" nvarchar(16)
+  "email" nvarchar(255)
+  "pec" nvarchar(255)
+  "data_di_nascita" date
+  "codice_comune_di_nascita" int(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."caa_coldiretti" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "nome" nvarchar(255)
+  "email" nvarchar(255)
+  "cell" nvarchar(16)
+  "codice_comune" int(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."gruppo" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "nome" nvarchar(255)
+  "referente_cf" nvarchar(16)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."ragione_sociale" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "nome" nvarchar(255)
+  "responsabile_legale_cf" nvarchar(16)
+  "CUAA" nvarchar(16)
+  "piva" nvarchar(16)
+  "gruppo_id" uniqueidentifier(16)
+  "codice_comune" int(10)
+  "indirizzo" nvarchar(255)
+  "IBAN" nvarchar(50)
+  "caa_coldiretti_id" uniqueidentifier(16)
+  "email" nvarchar(255)
+  "pec" nvarchar(255)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."condifesa" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "nome" nvarchar(255)
+  "email" nvarchar(255)
+  "cell" nvarchar(16)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."compagnia" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "short_nome" nvarchar(100)
+  "full_nome" nvarchar(255)
+  "piva" nvarchar(16)
+  "email" nvarchar(255)
+  "pec" nvarchar(255)
+  "cell" nvarchar(16)
+  "indirizzo" nvarchar(255)
+  "codice_comune" int(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."intermediario" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "short_nome" nvarchar(100)
+  "full_nome" nvarchar(255)
+  "piva" nvarchar(16)
+  "email" nvarchar(255)
+  "pec" nvarchar(255)
+  "cell" nvarchar(16)
+  "indirizzo" nvarchar(255)
+  "codice_comune" int(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."ramo" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ramo" nvarchar(255)
+  "numero" int(10)
+  "nome" nvarchar(255)
+  "dettaglio" nvarchar(255)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."relazione_rci" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ramo_id" uniqueidentifier(16)
+  "compagnia_id" uniqueidentifier(16)
+  "intermediario_id" uniqueidentifier(16)
+  "active" bit [default: 1]
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."documento" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ramo_id" uniqueidentifier(16)
+  "compagnia_id" uniqueidentifier(16)
+  "intermediario_id" uniqueidentifier(16)
+  "codice_ministeriale" nvarchar(4)
+  "nome" nvarchar(255)
+  "sigla" nvarchar(50)
+  "signed" bit [default: 0]
+  "personale" bit [default: 0]
+  "mandatory" bit [default: 0]
+  "lifecycle_id" int(10)
+  "entity" bit [default: 0]
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "core"."lifecycle" {
+  "id" int(10) [pk, not null]
+  "sale_reference" nvarchar(20)
+  "stato" nvarchar(50)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."preventivo" {
+  "sale_preventivo_id" uniqueidentifier(16) [pk, not null]
+  "piano_utilizzo_id" uniqueidentifier(16) [not null]
+  "prezzo_id" uniqueidentifier(16)
+  "contribuzione" bit [default: 1]
+  "condifesa" bit [default: 1]
+  "caa_coldiretti" bit [default: 1]
+  "GR_AG_id" uniqueidentifier(16)
+  "GR_NAG_id" uniqueidentifier(16)
+  "VF_AG_id" uniqueidentifier(16)
+  "VF_NAG_id" uniqueidentifier(16)
+  "EP_AG_id" uniqueidentifier(16)
+  "EP_NAG_id" uniqueidentifier(16)
+  "EP_CAT_AG_id" uniqueidentifier(16)
+  "EP_CAT_NAG_id" uniqueidentifier(16)
+  "neve_AG_id" uniqueidentifier(16)
+  "neve_NAG_id" uniqueidentifier(16)
+  "alluvione_AG_id" uniqueidentifier(16)
+  "gelo_brina_AG_id" uniqueidentifier(16)
+  "siccita_AG_id" uniqueidentifier(16)
+  "colpo_sole_vento_caldo_AG_id" uniqueidentifier(16)
+  "colpo_sole_vento_caldo_NAG_id" uniqueidentifier(16)
+  "colpo_sole_vento_caldo_CAT_AG_id" uniqueidentifier(16)
+  "colpo_sole_vento_caldo_CAT_NAG_id" uniqueidentifier(16)
+  "sbalzo_termico_onda_calore_AG_id" uniqueidentifier(16)
+  "sbalzo_termico_onda_calore_NAG_id" uniqueidentifier(16)
+  "sbalzo_termico_onda_calore_CAT_AG_id" uniqueidentifier(16)
+  "sbalzo_termico_onda_calore_CAT_NAG_id" uniqueidentifier(16)
+  "ag" decimal(4,2)
+  "nag" decimal(4,2)
+  "lordo" decimal(4,2)
+  "resa_cliente" int(10)
+  "valore_assicurato" int(10)
+  "premio_lordo" decimal(12,2)
+  "premio_netto" decimal(12,2)
+  "created_at" datetime2 [not null, default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."piano_utilizzo" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ragione_sociale_id" uniqueidentifier(16)
+  "condifesa_id" uniqueidentifier(16)
+  "anno" int(10)
+  "tipo" nvarchar(50)
+  "is_corrente" bit [default: 1]
+  "codice_comune" int(10)
+  "prodotto_id" uniqueidentifier(16)
+  "serra" bit [default: 0]
+  "bio" bit [default: 0]
+  "secondo_raccolto" bit [default: 0]
+  "superficie" int(10)
+  "note" text
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."piano_utilizzo_dettagliato" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ragione_sociale_id" uniqueidentifier(16)
+  "condifesa_id" uniqueidentifier(16)
+  "anno" int(10)
+  "is_corrente" bit [default: 1]
+  "codice_comune" int(10)
+  "prodotto_id" uniqueidentifier(16)
+  "serra" bit [default: 0]
+  "bio" bit [default: 0]
+  "secondo_raccolto" bit [default: 0]
+  "foglio" int(10)
+  "particella" int(10)
+  "superficie" int(10)
+  "data_semina_trapianto" date
+  "note" text
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."partita" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "piano_utilizzo_dettagliato_id" uniqueidentifier(16)
+  "numero" int(10)
+  "foglio" nvarchar(6)
+  "particella" nvarchar(6)
+  "superficie" int(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."prodotto" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "condifesa_id" uniqueidentifier(16)
+  "gruppo" nvarchar(100)
+  "nome" nvarchar(255)
+  "dettaglio" nvarchar(255)
+  "codice_ministeriale" nvarchar(4)
+  "codice_dettaglio_ministeriale" nvarchar(4)
+  "codice_dettaglio_condifesa" nvarchar(5)
+  "codice_prodotto" nvarchar(4)
+  "dettaglio_avepa" nvarchar(100)
+  "codice_avepa" int(10)
+  "codice_avepa_dettagliato" nvarchar(19)
+  "codice_gis" nvarchar(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."prezzi" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "anno" int(10)
+  "condifesa_id" uniqueidentifier(16)
+  "prodotto_id" uniqueidentifier(16)
+  "area" nvarchar(50)
+  "sv" decimal(10,2)
+  "resa_max" decimal(10,2)
+  "sv_bio" decimal(10,2)
+  "fascia" nvarchar(1)
+  "valore" decimal(10,2)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."tassi" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "anno" int(10)
+  "intermediario_id" uniqueidentifier(16)
+  "compagnia_id" uniqueidentifier(16)
+  "codice_comune" int(10)
+  "codice_ministeriale" nvarchar(4)
+  "tabella_conversione" nvarchar(2)
+  "tipo" nvarchar(50)
+  "garanzia" nvarchar(50)
+  "fr" int(10)
+  "tasso" nvarchar(3)
+  "valore" decimal(4,2)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."socio" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ragione_sociale_id" uniqueidentifier(16)
+  "condifesa_id" uniqueidentifier(16)
+  "codice_socio" nvarchar(50)
+}
+
+Table "grandine"."polizza" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "sale_polizza_id" uniqueidentifier(16) [not null]
+  "partita_id" uniqueidentifier(16) [not null]
+  "ag" bit [default: 1]
+  "created_at" datetime2 [not null, default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "grandine"."avepa" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "occupazione" nvarchar(255)
+  "codice_occupazione" nvarchar(3)
+  "destinazione" nvarchar(255)
+  "codice_destinazione" nvarchar(3)
+  "uso" nvarchar(255)
+  "codice_uso" nvarchar(3)
+  "dettaglio" nvarchar(255)
+  "codice_dettaglio" nvarchar(3)
+  "codice_ministeriale" nvarchar(3)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "sale"."preventivo" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ragione_sociale_id" uniqueidentifier(16)
+  "ramo_id" uniqueidentifier(16)
+  "intermediario_id" uniqueidentifier(16)
+  "compagnia_id" uniqueidentifier(16)
+  "premio_lordo" decimal(12,2)
+  "lifecycle_id" int(10)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "sale"."produttore" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "persona_fisica_cf" nvarchar(16)
+  "ramo_id" uniqueidentifier(16)
+  "percentuale" decimal(5,2)
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "sale"."documento_archivio" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "ragione_sociale_id" uniqueidentifier(16)
+  "documento_id" uniqueidentifier(16)
+  "anno" int(10)
+  "file_path" nvarchar(500)
+  "archivio" bit [default: 0]
+  "signed" bit [default: 0]
+  "sent" bit [default: 0]
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "sale"."documento_archivio_preventivo" {
+  "documento_archivio_id" uniqueidentifier(16) [pk, not null]
+  "preventivo_id" uniqueidentifier(16) [pk, not null]
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "sale"."polizza" {
+  "id" uniqueidentifier(16) [pk, not null, default: `newid()`]
+  "numero" nvarchar(50)
+  "ragione_sociale_id" uniqueidentifier(16)
+  "ramo_id" uniqueidentifier(16)
+  "intermediario_id" uniqueidentifier(16)
+  "compagnia_id" uniqueidentifier(16)
+  "premio_lordo" decimal(12,2)
+  "lifecycle_id" int(10)
+  "produttore_id" uniqueidentifier(16)
+  "preventivo_id" uniqueidentifier(16)
+  "start_date" date
+  "end_date" date
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Table "sale"."documento_archivio_polizza" {
+  "documento_archivio_id" uniqueidentifier(16) [pk, not null]
+  "polizza_id" uniqueidentifier(16) [pk, not null]
+  "created_at" datetime2 [default: `sysutcdatetime()`]
+  "updated_at" datetime2
+}
+
+Ref "FK__caa_coldi__codic__2BFE89A6":"core"."comune"."codice_comune" < "core"."caa_coldiretti"."codice_comune"
+
+Ref "FK__compagnia__codic__32AB8735":"core"."comune"."codice_comune" < "core"."compagnia"."codice_comune"
+
+Ref "FK__documento__compa__3864608B":"core"."compagnia"."id" < "core"."documento"."compagnia_id"
+
+Ref "FK__documento__inter__37703C52":"core"."intermediario"."id" < "core"."documento"."intermediario_id"
+
+Ref "FK__documento__ramo___367C1819":"core"."ramo"."id" < "core"."documento"."ramo_id"
+
+Ref "FK__documento__lifec__395884C4":"core"."lifecycle"."id" < "core"."documento"."lifecycle_id"
+
+Ref "FK__gruppo__referent__2CF2ADDF":"core"."persona_fisica"."cf" < "core"."gruppo"."referente_cf"
+
+Ref "FK__intermedi__codic__31B762FC":"core"."comune"."codice_comune" < "core"."intermediario"."codice_comune"
+
+Ref "FK__persona_f__codic__2B0A656D":"core"."comune"."codice_comune" < "core"."persona_fisica"."codice_comune"
+
+Ref "FK__ragione_s__respo__2DE6D218":"core"."persona_fisica"."cf" < "core"."ragione_sociale"."responsabile_legale_cf"
+
+Ref "FK__ragione_s__codic__2FCF1A8A":"core"."comune"."codice_comune" < "core"."ragione_sociale"."codice_comune"
+
+Ref "FK__ragione_s__caa_c__30C33EC3":"core"."caa_coldiretti"."id" < "core"."ragione_sociale"."caa_coldiretti_id"
+
+Ref "FK__ragione_s__grupp__2EDAF651":"core"."gruppo"."id" < "core"."ragione_sociale"."gruppo_id"
+
+Ref "FK__relazione__compa__3587F3E0":"core"."compagnia"."id" < "core"."relazione_rci"."compagnia_id"
+
+Ref "FK__relazione__ramo___339FAB6E":"core"."ramo"."id" < "core"."relazione_rci"."ramo_id"
+
+Ref "FK__relazione__inter__3493CFA7":"core"."intermediario"."id" < "core"."relazione_rci"."intermediario_id"
+
+Ref "FK__partita__piano_u__6166761E":"grandine"."piano_utilizzo_dettagliato"."id" < "grandine"."partita"."piano_utilizzo_dettagliato_id"
+
+Ref "FK__piano_uti__prodo__503BEA1C":"grandine"."prodotto"."id" < "grandine"."piano_utilizzo"."prodotto_id"
+
+Ref "FK__piano_uti__codic__4F47C5E3":"core"."comune"."codice_comune" < "grandine"."piano_utilizzo"."codice_comune"
+
+Ref "FK__piano_uti__ragio__4D5F7D71":"core"."ragione_sociale"."id" < "grandine"."piano_utilizzo"."ragione_sociale_id"
+
+Ref "FK__piano_uti__condi__4E53A1AA":"core"."condifesa"."id" < "grandine"."piano_utilizzo"."condifesa_id"
+
+Ref "FK__piano_uti__ragio__5D95E53A":"core"."ragione_sociale"."id" < "grandine"."piano_utilizzo_dettagliato"."ragione_sociale_id"
+
+Ref "FK__piano_uti__condi__5E8A0973":"core"."condifesa"."id" < "grandine"."piano_utilizzo_dettagliato"."condifesa_id"
+
+Ref "FK__piano_uti__codic__5F7E2DAC":"core"."comune"."codice_comune" < "grandine"."piano_utilizzo_dettagliato"."codice_comune"
+
+Ref "FK__piano_uti__prodo__607251E5":"grandine"."prodotto"."id" < "grandine"."piano_utilizzo_dettagliato"."prodotto_id"
+
+Ref "FK__polizza__partita__5AB9788F":"grandine"."partita"."id" < "grandine"."polizza"."partita_id"
+
+Ref "FK__polizza__sale_po__59C55456":"sale"."polizza"."id" < "grandine"."polizza"."sale_polizza_id"
+
+Ref "FK__preventiv__sale___56E8E7AB":"sale"."preventivo"."id" < "grandine"."preventivo"."sale_preventivo_id"
+
+Ref "FK__preventiv__prezz__58D1301D":"grandine"."prezzi"."id" < "grandine"."preventivo"."prezzo_id"
+
+Ref "FK__preventiv__piano__57DD0BE4":"grandine"."piano_utilizzo"."id" < "grandine"."preventivo"."piano_utilizzo_id"
+
+Ref "FK__prezzi__prodotto__5224328E":"grandine"."prodotto"."id" < "grandine"."prezzi"."prodotto_id"
+
+Ref "FK__prezzi__condifes__51300E55":"core"."condifesa"."id" < "grandine"."prezzi"."condifesa_id"
+
+Ref "FK__prodotto__condif__531856C7":"core"."condifesa"."id" < "grandine"."prodotto"."condifesa_id"
+
+Ref "FK__socio__condifesa__5CA1C101":"core"."condifesa"."id" < "grandine"."socio"."condifesa_id"
+
+Ref "FK__socio__ragione_s__5BAD9CC8":"core"."ragione_sociale"."id" < "grandine"."socio"."ragione_sociale_id"
+
+Ref "FK__tassi__codice_co__55F4C372":"core"."comune"."codice_comune" < "grandine"."tassi"."codice_comune"
+
+Ref "FK__tassi__compagnia__55009F39":"core"."compagnia"."id" < "grandine"."tassi"."compagnia_id"
+
+Ref "FK__tassi__intermedi__540C7B00":"core"."intermediario"."id" < "grandine"."tassi"."intermediario_id"
+
+Ref "FK__documento__docum__489AC854":"core"."documento"."id" < "sale"."documento_archivio"."documento_id"
+
+Ref "FK__documento__ragio__47A6A41B":"core"."ragione_sociale"."id" < "sale"."documento_archivio"."ragione_sociale_id"
+
+Ref "FK__documento__docum__4C6B5938":"sale"."documento_archivio"."id" < "sale"."documento_archivio_polizza"."documento_archivio_id"
+
+Ref "FK__documento__poliz__4B7734FF":"sale"."polizza"."id" < "sale"."documento_archivio_polizza"."polizza_id"
+
+Ref "FK__documento__preve__498EEC8D":"sale"."preventivo"."id" < "sale"."documento_archivio_preventivo"."preventivo_id"
+
+Ref "FK__documento__docum__4A8310C6":"sale"."documento_archivio"."id" < "sale"."documento_archivio_preventivo"."documento_archivio_id"
+
+Ref "FK__polizza__produtt__43D61337":"sale"."produttore"."id" < "sale"."polizza"."produttore_id"
+
+Ref "FK__polizza__ramo_id__41EDCAC5":"core"."ramo"."id" < "sale"."polizza"."ramo_id"
+
+Ref "FK__polizza__lifecyc__42E1EEFE":"core"."lifecycle"."id" < "sale"."polizza"."lifecycle_id"
+
+Ref "FK__polizza__prevent__44CA3770":"sale"."preventivo"."id" < "sale"."polizza"."preventivo_id"
+
+Ref "FK__polizza__interme__3F115E1A":"core"."intermediario"."id" < "sale"."polizza"."intermediario_id"
+
+Ref "FK__polizza__ragione__40F9A68C":"core"."ragione_sociale"."id" < "sale"."polizza"."ragione_sociale_id"
+
+Ref "FK__polizza__compagn__40058253":"core"."compagnia"."id" < "sale"."polizza"."compagnia_id"
+
+Ref "FK__preventiv__compa__3B40CD36":"core"."compagnia"."id" < "sale"."preventivo"."compagnia_id"
+
+Ref "FK__preventiv__ragio__3C34F16F":"core"."ragione_sociale"."id" < "sale"."preventivo"."ragione_sociale_id"
+
+Ref "FK__preventiv__ramo___3D2915A8":"core"."ramo"."id" < "sale"."preventivo"."ramo_id"
+
+Ref "FK__preventiv__inter__3A4CA8FD":"core"."intermediario"."id" < "sale"."preventivo"."intermediario_id"
+
+Ref "FK__preventiv__lifec__3E1D39E1":"core"."lifecycle"."id" < "sale"."preventivo"."lifecycle_id"
+
+Ref "FK__produttor__ramo___45BE5BA9":"core"."ramo"."id" < "sale"."produttore"."ramo_id"
+
+Ref "FK__produttor__perso__46B27FE2":"core"."persona_fisica"."cf" < "sale"."produttore"."persona_fisica_cf"

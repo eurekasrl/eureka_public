@@ -1,0 +1,22 @@
+/* src/index.css and src/App.css (Clean them both) */
+
+:root {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: block !important; /* Forces layout to start from top-left */
+  width: 100% !important;
+  min-width: 100% !important;
+  background-color: #f5f5f5;
+}
+
+#root {
+  width: 100% !important;
+  max-width: 100% !important; /* Removes the 1280px limit */
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}

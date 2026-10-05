@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+    volumes:
+      - mssql:/var/opt/mssql
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      - db
+    # Localhost only: expose to a tailnet with `tailscale serve` rather than binding 0.0.0.0.
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_URL: mssql+pyodbc://sa:${MSSQL_SA_PASSWORD}@db:1433/eureka?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes
+      API_KEY: ${API_KEY:?set API_KEY in .env}
+      CORS_ORIGINS: http://localhost:3000
+      MOUNT_PATH_EUREKA: /data/clienti
+      INFO_EUREKA_MAIL_USER: ${INFO_EUREKA_MAIL_USER:-demo@example.com}
+      INFO_EUREKA_MAIL_PASSWORD: ${INFO_EUREKA_MAIL_PASSWORD:-}
+      INFO_EUREKA_MAIL_HOST: ${INFO_EUREKA_MAIL_HOST:-localhost}
+      INFO_EUREKA_MAIL_PORT: ${INFO_EUREKA_MAIL_PORT:-465}
+    volumes:
+      - clienti:/data/clienti
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
+        VITE_API_KEY: ${API_KEY}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:3000:3000"
+
+volumes:
+  mssql:
+  clienti:

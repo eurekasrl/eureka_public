@@ -1,0 +1,16 @@
+fastapi
+fastapi-mail
+uvicorn
+pydantic[email]
+sqlalchemy
+pyodbc
+python-dotenv
+python-multipart
+pandas
+pdfplumber
+openpyxl
+unidecode
+pytesseract
+pillow
+pytest
+httpx
