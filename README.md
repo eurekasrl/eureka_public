@@ -148,3 +148,8 @@ Once the land and crops are digitized into Partite:
 | **Mapping Modal** | Ensures 100% accurate crop identification before saving. |
 | **Partite Logic** | Transforms complex land registry data into simple insurance units. |
 | **Bulk Sync** | Guarantees data integrity and "One Source of Truth". |
+---
+
+## License
+
+Eureka is released under the [GNU AGPL-3.0](LICENSE): you may use, modify and share it, but if you run a modified version as a network service you must publish its source code.
